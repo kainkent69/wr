@@ -1,0 +1,21 @@
+
+image: docker:24.0.5-git
+services:
+  - docker:24.0.5-dind
+
+stages:
+  - build 
+  - deploy
+  - migrate
+
+variables:
+  REG: $CI_REGISTRY_IMAGE
+  SHA: $CI_COMMIT_SHA
+  #  latest variables
+  APP_LATEST: $CI_REGISTRY_IMAGE/app:latest
+  MIGRATE_LATEST: $CI_REGISTRY_IMAGE/migrate:latest
+
+# login
+before_script:
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+
