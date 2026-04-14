@@ -58,13 +58,13 @@ func (slot *Slots) Spin() W {
 			v.Unhit()
 		}
 
-		if v.IsEmpty {
-			slot.Unhit()
-		} else {
-			slot.Hit()
-		}
 	}
 
+	if selected.IsEmpty {
+		slot.Unhit()
+	} else {
+		slot.Hit()
+	}
 	return selected
 }
 

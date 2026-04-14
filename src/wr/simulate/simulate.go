@@ -80,10 +80,9 @@ func (s *Simulator) report(slot wr.Slots) Report {
 			if math.IsInf(res, 1) || math.IsNaN(res) {
 				res = 0
 			}
-
 			childReport.Contirbution = res
 		} else {
-			res := float64(v.H) * 100 / float64(slot.Spins)
+			res := float64(v.H) * 100 / float64(s.Spins)
 			if math.IsInf(res, 1) || math.IsNaN(res) {
 				res = 0
 			}
