@@ -20,3 +20,6 @@ type Report = simulate.Report
 
 // recorder
 type Record = recorder.Record
+
+var Default = wr.Default
+var DefaultSlot = wr.DefaultSlot
