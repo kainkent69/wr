@@ -1,13 +1,6 @@
-package main
+package wr_test
 
 import (
-	// "encoding/json"
-	// "fmt"
-
-	"encoding/json"
-	"fmt"
-	"log"
-
 	"github.com/kainkent69/wr/src/wr"
 	"github.com/kainkent69/wr/src/wr/simulate"
 )
@@ -30,7 +23,8 @@ func main() {
 
 		{
 			ID:      4,
-			Weights: 1000,
+			Weights: 10000,
+			IsEmpty: true,
 		},
 	}
 
@@ -47,15 +41,7 @@ func main() {
 		Spins: 100000,
 	}
 
-	fmt.Println("runnig a report")
 	report := sm.Run(wr.Default)
-	fmt.Println("got report")
-	fmt.Printf("the report: %+v\n", report)
-
-	js, err := json.MarshalIndent(report, "", "  ")
-	if err != nil {
-		log.Fatalf("failed to marshal indent", err)
-	}
-	fmt.Println(string(js))
+	report.Print()
 
 }
