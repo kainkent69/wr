@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"math"
 
 	"github.com/kainkent69/wr/src/wr"
 )
@@ -20,8 +21,7 @@ func (s *Simulator) Run(rnd wr.Randomizor) Report {
 		Track: true,
 	}
 	slot.Init(rnd)
-	run(slot, 100)
-
+	run(slot, s.Spins)
 	return s.report(*slot)
 }
 
@@ -36,13 +36,19 @@ func run(slot *wr.Slots, spins int64) {
 type Report struct {
 	HF   float64
 	SAvg float64
-	Each map[int64]Report
 	Hit  int64
 	Fail int64
 	// streak result
 	StreakResult map[int64]int64
 	MinStreak    int64
 	MaxStreak    int64
+	Contirbution float64
+	// the meaning for empty
+	IsEmpty bool
+
+	// reporter
+
+	Each map[int64]Report
 }
 
 // make a report
@@ -60,14 +66,28 @@ func (s *Simulator) report(slot wr.Slots) Report {
 	report.HF = slot.HF()
 	report.SAvg = slot.Savg()
 	for _, v := range slot.Lists {
+		totalHits := float64(slot.H)
+
 		childReport := Report{
-			HF:           v.HF(),
-			SAvg:         v.Savg(),
-			Hit:          v.H,
-			Fail:         v.F,
-			StreakResult: v.SReq,
-			MinStreak:    v.SMin,
-			MaxStreak:    v.SMax,
+			HF:      v.HF(),
+			Hit:     v.H,
+			Fail:    v.F,
+			IsEmpty: v.IsEmpty,
+		}
+
+		if !v.IsEmpty {
+			res := float64(v.H) * 100 / totalHits
+			if math.IsInf(res, 1) || math.IsNaN(res) {
+				res = 0
+			}
+
+			childReport.Contirbution = res
+		} else {
+			res := float64(v.H) * 100 / float64(slot.Spins)
+			if math.IsInf(res, 1) || math.IsNaN(res) {
+				res = 0
+			}
+			childReport.Contirbution = res
 		}
 		report.Each[v.ID] = childReport
 

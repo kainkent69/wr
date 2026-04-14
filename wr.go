@@ -7,16 +7,16 @@ import (
 )
 
 // the slots
-type Slot wr.Slots
+type Slot = wr.Slots
 
 // the  weighted pair value struct
-type W wr.W
+type W = wr.W
 
 // the simulator type
-type Simulator simulate.Simulator
+type Simulator = simulate.Simulator
 
 // the report
-type Report simulate.Report
+type Report = simulate.Report
 
 // recorder
-type Record recorder.Record
+type Record = recorder.Record

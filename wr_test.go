@@ -1,11 +1,13 @@
 package wr_test
 
 import (
+	"testing"
+
 	"github.com/kainkent69/wr/src/wr"
 	"github.com/kainkent69/wr/src/wr/simulate"
 )
 
-func main() {
+func TestMain(t *testing.T) {
 	list := []*wr.W{
 		{
 			ID:      1,
