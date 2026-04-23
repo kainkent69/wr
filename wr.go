@@ -1,25 +1,16 @@
 package wr
 
-import (
-	"github.com/kainkent69/wr/src/wr"
-	"github.com/kainkent69/wr/src/wr/recorder"
-	"github.com/kainkent69/wr/src/wr/simulate"
-)
+import "math/rand/v2"
 
-// the slots
-type Slot = wr.Slots
+/*
+Interface to use for randomization it can be in any algo as long as they return a number
+*/
 
-// the  weighted pair value struct
-type W = wr.W
+type random struct{}
 
-// the simulator type
-type Simulator = simulate.Simulator
+func (random) Rand(end int64) int64 {
+	return rand.Int64N(end)
+}
 
-// the report
-type Report = simulate.Report
-
-// recorder
-type Record = recorder.Record
-
-var Default = wr.Default
-var DefaultSlot = wr.DefaultSlot
+// the default random generator
+var Default = random{}

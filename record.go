@@ -1,4 +1,4 @@
-package recorder
+package wr
 
 import "math"
 

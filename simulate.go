@@ -1,22 +1,20 @@
-package simulate
+package wr
 
 import (
 	"encoding/json"
 	"fmt"
 	"log"
 	"math"
-
-	"github.com/kainkent69/wr/src/wr"
 )
 
 type Simulator struct {
-	List  []*wr.W
+	List  []*W
 	Spins int64
 }
 
 // make a simulation
-func (s *Simulator) Run(rnd wr.Randomizor) Report {
-	slot := &wr.Slots{
+func (s *Simulator) Run(rnd Randomizor) Report {
+	slot := &Slots{
 		Lists: s.List,
 		Track: true,
 	}
@@ -26,7 +24,7 @@ func (s *Simulator) Run(rnd wr.Randomizor) Report {
 }
 
 // run the result
-func run(slot *wr.Slots, spins int64) {
+func run(slot *Slots, spins int64) {
 	for range spins {
 		slot.Spin()
 	}
@@ -52,7 +50,7 @@ type Report struct {
 }
 
 // make a report
-func (s *Simulator) report(slot wr.Slots) Report {
+func (s *Simulator) report(slot Slots) Report {
 	report := Report{
 		Each:         map[int64]Report{},
 		Hit:          slot.H,

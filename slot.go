@@ -3,8 +3,6 @@ package wr
 import (
 	"fmt"
 	"log"
-
-	"github.com/kainkent69/wr/src/wr/recorder"
 )
 
 type Slots struct {
@@ -14,7 +12,7 @@ type Slots struct {
 	Total int64
 	Track bool
 	rand  Randomizor
-	recorder.Record
+	Record
 	// init
 	_init bool
 }
@@ -35,7 +33,7 @@ func (s *Slots) Init(rand Randomizor) {
 	}
 	s.rand = rand
 	s._init = true
-	s.Record = recorder.Record{
+	s.Record = Record{
 		SReq: map[int64]int64{},
 	}
 	fmt.Printf("slot is now %t \n", s._init)

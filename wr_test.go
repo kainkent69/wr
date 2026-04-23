@@ -3,8 +3,7 @@ package wr_test
 import (
 	"testing"
 
-	"github.com/kainkent69/wr/src/wr"
-	"github.com/kainkent69/wr/src/wr/simulate"
+	"github.com/kainkent69/wr"
 )
 
 func TestMain(t *testing.T) {
@@ -38,7 +37,7 @@ func TestMain(t *testing.T) {
 
 	slot.Init(wr.Default)
 
-	sm := simulate.Simulator{
+	sm := wr.Simulator{
 		List:  list,
 		Spins: 100000,
 	}
