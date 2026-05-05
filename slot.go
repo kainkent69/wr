@@ -6,7 +6,7 @@ import (
 )
 
 type Slots struct {
-	Lists []*W
+	Lists []Wer
 	Spins int64
 	None  int64
 	Total int64
@@ -27,9 +27,11 @@ func (s *Slots) Check() {
 
 // init
 func (s *Slots) Init(rand Randomizor) {
+
 	for _, v := range s.Lists {
-		v.Init(s)
-		s.Total += v.Weights
+		info := v.Info()
+		info.Init(s)
+		s.Total += info.Weights
 	}
 	s.rand = rand
 	s._init = true
@@ -45,15 +47,16 @@ func (slot *Slots) Spin() W {
 	last := int64(0)
 	var selected W
 	for _, v := range slot.Lists {
+		info := v.Info()
 		start := last
-		last += v.Weights
+		last += info.Weights
 		if rnd <= last && start <= rnd {
-			selected = *v
+			selected = *info
 			if slot.Track {
-				v.Hit()
+				info.Hit()
 			}
 		} else if slot.Track {
-			v.Unhit()
+			v.Info()
 		}
 
 	}

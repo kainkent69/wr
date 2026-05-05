@@ -1,5 +1,9 @@
 package wr
 
+type Wer interface {
+	Info() *W
+	Reward() int64
+}
 type W struct {
 	// identifiyer it can mean a thin
 	ID int64

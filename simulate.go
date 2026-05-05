@@ -8,8 +8,9 @@ import (
 )
 
 type Simulator struct {
-	List  []*W
+	List  []Wer
 	Spins int64
+	Bet   int64
 }
 
 // make a simulation
@@ -45,8 +46,11 @@ type Report struct {
 	IsEmpty bool
 
 	// reporter
-
-	Each map[int64]Report
+	Each       map[int64]Report
+	Spent      int64
+	Won        int64
+	RTP        float64
+	RTPContrib float64
 }
 
 // make a report
@@ -63,14 +67,19 @@ func (s *Simulator) report(slot Slots) Report {
 	}
 	report.HF = slot.HF()
 	report.SAvg = slot.Savg()
-	for _, v := range slot.Lists {
+	report.Spent = s.Bet * s.Spins
+	for _, d := range slot.Lists {
+		v := d.Info()
 		totalHits := float64(slot.H)
-
+		var won int64 = d.Reward() * v.H
+		report.Won += won
 		childReport := Report{
-			HF:      v.HF(),
-			Hit:     v.H,
-			Fail:    v.F,
-			IsEmpty: v.IsEmpty,
+			HF:         v.HF(),
+			Hit:        v.H,
+			Fail:       v.F,
+			IsEmpty:    v.IsEmpty,
+			Won:        won,
+			RTPContrib: float64(won) * 100 / float64(report.Spent),
 		}
 
 		if !v.IsEmpty {
@@ -89,6 +98,10 @@ func (s *Simulator) report(slot Slots) Report {
 		report.Each[v.ID] = childReport
 
 	}
+
+	// the rtp
+	report.RTP = float64(report.Won) * 100 / float64(report.Spent)
+	report.RTPContrib = float64(report.Won) * 100 / float64(report.Spent)
 
 	return report
 }
