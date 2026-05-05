@@ -144,5 +144,8 @@ The generated `record.Report` contains detailed data:
 }
 ```
 
+
+For API Documentation see [here](/API.md)
 ## License
 MIT
+
