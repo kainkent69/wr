@@ -1,5 +1,7 @@
 package wr
 
+import "github.com/kainkent69/wr/record"
+
 type Wer interface {
 	Info() *W
 	Reward() int64
@@ -13,7 +15,7 @@ type W struct {
 	IsEmpty bool
 	// the parent beause  the slots would init each of them
 	Parent *Slots
-	Record
+	record.Record
 	// initialize
 	_init bool
 }
@@ -22,7 +24,7 @@ type W struct {
 func (w *W) Init(slot *Slots) {
 	w.Parent = slot
 	w._init = true
-	w.Record = Record{
+	w.Record = record.Record{
 		SReq: map[int64]int64{},
 	}
 }

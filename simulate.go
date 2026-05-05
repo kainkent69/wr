@@ -1,10 +1,9 @@
 package wr
 
 import (
-	"encoding/json"
-	"fmt"
-	"log"
 	"math"
+
+	"github.com/kainkent69/wr/record"
 )
 
 type Simulator struct {
@@ -14,7 +13,7 @@ type Simulator struct {
 }
 
 // make a simulation
-func (s *Simulator) Run(rnd Randomizor) Report {
+func (s *Simulator) Run(rnd Randomizor) record.Report {
 	slot := &Slots{
 		Lists: s.List,
 		Track: true,
@@ -32,31 +31,10 @@ func run(slot *Slots, spins int64) {
 
 }
 
-type Report struct {
-	HF   float64
-	SAvg float64
-	Hit  int64
-	Fail int64
-	// streak result
-	StreakResult map[int64]int64
-	MinStreak    int64
-	MaxStreak    int64
-	Contirbution float64
-	// the meaning for empty
-	IsEmpty bool
-
-	// reporter
-	Each       map[int64]Report
-	Spent      int64
-	Won        int64
-	RTP        float64
-	RTPContrib float64
-}
-
 // make a report
-func (s *Simulator) report(slot Slots) Report {
-	report := Report{
-		Each:         map[int64]Report{},
+func (s *Simulator) report(slot Slots) record.Report {
+	report := record.Report{
+		Each:         map[int64]record.Report{},
 		Hit:          slot.H,
 		Fail:         slot.F,
 		StreakResult: slot.SReq,
@@ -73,7 +51,7 @@ func (s *Simulator) report(slot Slots) Report {
 		totalHits := float64(slot.H)
 		var won int64 = d.Reward() * v.H
 		report.Won += won
-		childReport := Report{
+		childReport := record.Report{
 			HF:         v.HF(),
 			Hit:        v.H,
 			Fail:       v.F,
@@ -104,19 +82,4 @@ func (s *Simulator) report(slot Slots) Report {
 	report.RTPContrib = float64(report.Won) * 100 / float64(report.Spent)
 
 	return report
-}
-
-// return to something printable
-func (r Report) Printable() string {
-	b, err := json.MarshalIndent(r, "", "   ")
-	if err != nil {
-		log.Fatalf("report marshal to json failed")
-	}
-	return string(b)
-
-}
-
-// print it to stdin
-func (r Report) Print() {
-	fmt.Println(r.Printable())
 }

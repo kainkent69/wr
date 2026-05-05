@@ -1,4 +1,4 @@
-package wr
+package record
 
 import "math"
 
