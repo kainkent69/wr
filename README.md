@@ -68,7 +68,7 @@ func main() {
 
 ### 2. Range Selection (`ranges`)
 
-The `ranges` package is ideal for games like Hilo where a "hit" occurs if a random roll falls within a specific range `[0, A]`.
+The `ranges` package is ideal for games like Hilo where a "hit" occurs if a random roll falls within a specific range.
 
 #### Basic Usage
 ```go
@@ -89,14 +89,17 @@ func (h *HiloGame) Reward() int64   { return h.reward }
 
 func main() {
 	// Initialize a range with a maximum of 10,000
-	r := ranges.NewR(10000, 0)
+	r := ranges.NewR(10000)
 	game := &HiloGame{r: &r}
 
-	// Set probability to 50%
-	game.r.A = 5000
+	// Set probability and calculate acceptable range
+	var prob int64 = 50
+	acceptable := game.r.Range / (100 / prob)
 	game.reward = 200
 
-	if game.r.Roll(wr.Default) {
+	// Spin and check if it's a hit
+	result := game.r.Spin(wr.Default)
+	if result <= acceptable {
 		game.r.Hit(game)
 	} else {
 		game.r.Unhit()

@@ -75,11 +75,10 @@ Package for range-based probability tracking (e.g., Hilo games).
 #### `R`
 Configuration for range-based rolls.
 - **Fields**:
-  - `A`: The "hit" threshold. If `roll <= A`, it's a hit.
   - `Range`: The maximum possible roll value.
 - **Methods**:
-  - `NewR(r int64, a int64) R`: Factory function for a new range.
-  - `Roll(rand wr.Randomizor) bool`: Performs a roll and returns `true` if it's a hit.
+  - `NewR(r int64) R`: Factory function for a new range.
+  - `Spin(rand wr.Randomizor) int64`: Performs a roll and returns the result in range `[0, Range)`.
   - `Hit(rer Rer)`: Records a win.
   - `Unhit()`: Records a loss and updates streaks.
   - `NewReport(bet int64, spins int64) record.Report`: Generates a report from recorded data.
