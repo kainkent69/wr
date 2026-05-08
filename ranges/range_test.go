@@ -23,11 +23,11 @@ func (m *MockHilo) Reward() int64 {
 }
 
 func (m *MockHilo) Run(prob int64, bet int64) {
-	m.r.A = m.r.Range / (100 / prob)
-	res := m.Info().Roll(wr.Default)
+	acceptable := m.r.Range / (100 / prob)
+	result := m.Info().Spin(wr.Default)
 	m.reward = bet * prob / (100 + 3)
 	m.Spins++
-	if res {
+	if result <= acceptable {
 		m.r.Hit(m)
 	} else {
 		m.r.Unhit()
@@ -36,7 +36,7 @@ func (m *MockHilo) Run(prob int64, bet int64) {
 }
 
 func TestRange(t *testing.T) {
-	n := ranges.NewR(10000, 0)
+	n := ranges.NewR(10000)
 	var M = &MockHilo{
 		r: &n,
 	}

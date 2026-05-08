@@ -9,8 +9,6 @@ import (
 
 type R struct {
 	// start
-	A int64
-	// range
 	Range int64
 	// for recording and simulations
 	record.Record
@@ -18,9 +16,8 @@ type R struct {
 	record.Report
 }
 
-func NewR(r int64, a int64) R {
+func NewR(r int64) R {
 	return R{
-		A:     a,
 		Range: r,
 		Record: record.Record{
 			SReq: map[int64]int64{},
@@ -28,15 +25,14 @@ func NewR(r int64, a int64) R {
 	}
 }
 
-func (r *R) Roll(rand wr.Randomizor) bool {
+func (r *R) Spin(rand wr.Randomizor) int64 {
 	rng := rand.Rand(r.Range)
-	if rng <= r.A {
-		return true
-	}
-	return false
+	return rng
 }
 
+// test hit for testing only
 func (r *R) Hit(rer Rer) {
+
 	if r.Each == nil {
 		r.Each = map[int64]*record.Record{}
 	}
