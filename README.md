@@ -6,6 +6,7 @@ A Go library for weighted selection and range-based probability tracking, design
 
 - **Weighted Selection**: Efficiently select items based on relative weights with built-in tracking.
 - **Range Probability**: Handle dynamic win conditions where the "hit" range changes per roll.
+- **Secure Randomization**: Choice between fast pseudorandom (`Default`) and cryptographically secure (`Secure`) generators.
 - **Advanced Statistics**: Automatically tracks Hit Frequency (HF), win streaks (min/max/avg), and streak distributions.
 - **RTP Analysis**: Calculate Return to Player (RTP) and individual item contributions to total returns.
 - **Simulation Suite**: Easily run large-scale simulations to verify math models.

@@ -57,6 +57,7 @@ A helper for running batch simulations.
 
 ### Variables
 - `Default`: A standard implementation of `Randomizor` using `math/rand/v2`.
+- `Secure`: A cryptographically secure implementation of `Randomizor` using `crypto/rand`.
 
 ---
 
