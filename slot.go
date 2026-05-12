@@ -44,26 +44,24 @@ func (s *Slots) Init(rand Randomizor) {
 }
 
 // spins  the slot
-func (slot *Slots) Spin() W {
+func (slot *Slots) Spin() Wer {
 	rnd := slot.rand.Rand(slot.Total)
 	last := int64(0)
-	var selected W
+	var selected Wer
 	for _, v := range slot.Lists {
 		info := v.Info()
 		start := last
 		last += info.Weights
 		if rnd <= last && start <= rnd {
-			selected = *info
+			selected = v
 			if slot.Track {
 				info.Hit()
 			}
-		} else if slot.Track {
-			v.Info()
 		}
 
 	}
 
-	if selected.IsEmpty {
+	if selected.Info().IsEmpty {
 		slot.Unhit()
 	} else {
 		slot.Hit()
