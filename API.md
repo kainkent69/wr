@@ -26,6 +26,11 @@ The interface that items must implement to be used in weighted selections.
 Interface for generating random numbers.
 - `Rand(n int64) int64`: Should return a random integer in the range `[0, n)`.
 
+#### `Simulator`
+An interface for running batch simulations.
+- **Methods**:
+  - `Simulate(bet int64, spins int64) record.Report`: Runs the simulation and returns a comprehensive report.
+
 ### Types
 
 #### `W`
@@ -38,22 +43,14 @@ The base struct for tracking weighted items.
   - `Init(slot *Slots)`: Initializes the internal record and links to parent slots.
 
 #### `Slots`
-Manages a collection of weighted items.
+Manages a collection of weighted items. Implements `Simulator`.
 - **Fields**:
   - `Lists`: Slice of items implementing `Wer`.
   - `Track`: Boolean to enable/disable hit tracking.
 - **Methods**:
   - `Init(rand Randomizor)`: Initializes the slot system and calculates total weight.
   - `Spin() W`: Executes a weighted selection and returns the selected item.
-
-#### `Simulator`
-A helper for running batch simulations.
-- **Fields**:
-  - `List`: The items to simulate.
-  - `Spins`: Total number of spins to run.
-  - `Bet`: The cost per spin.
-- **Methods**:
-  - `Run(rnd Randomizor) record.Report`: Runs the simulation and returns a comprehensive report.
+  - `Simulate(bet int64, spins int64) record.Report`: Runs the simulation for a weighted list.
 
 ### Variables
 - `Default`: A standard implementation of `Randomizor` using `math/rand/v2`.
@@ -82,7 +79,15 @@ Configuration for range-based rolls.
   - `Spin(rand wr.Randomizor) int64`: Performs a roll and returns the result in range `[0, Range)`.
   - `Hit(rer Rer)`: Records a win.
   - `Unhit()`: Records a loss and updates streaks.
-  - `NewReport(bet int64, spins int64) record.Report`: Generates a report from recorded data.
+  - `Simulate(bet int64, spins int64) record.Report`: Generates a report from recorded data.
+
+#### `Simulator`
+A helper to run range simulations. Implements `wr.Simulator`.
+- **Fields**:
+  - `R`: The `R` instance to use.
+  - `Task`: A function that defines the logic for each spin (e.g., calling `Spin` and `Hit`/`Unhit`).
+- **Methods**:
+  - `Simulate(bet int64, spins int64) record.Report`: Runs the `Task` for `spins` times and returns a report.
 
 ---
 
@@ -105,7 +110,11 @@ The output of a simulation or session.
 - **Fields**:
   - `Hit / Fail`: Total counts.
   - `StreakResult`: Map of streak lengths to their frequency.
+  - `Spent / Won`: Financial tracking.
+  - `Bet`: The bet amount used for the simulation.
   - `RTP`: Total Return to Player percentage.
+  - `RTPContrib`: Return to Player contribution of a specific item.
+  - `Contribution`: Frequency contribution of a specific item.
   - `Each`: Map of sub-reports for individual items/rewards.
 - **Methods**:
   - `Print()`: Prints a JSON-formatted report to standard output.

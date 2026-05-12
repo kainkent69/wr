@@ -34,3 +34,7 @@ func (secure) Rand(end int64) int64 {
 
 // the secure random generator
 var Secure = secure{}
+
+func ToWer(data Wer) Wer {
+	return data
+}

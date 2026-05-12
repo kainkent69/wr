@@ -6,21 +6,10 @@ import (
 	"github.com/kainkent69/wr/record"
 )
 
-type Simulator struct {
-	List  []Wer
-	Spins int64
-	Bet   int64
-}
-
-// make a simulation
-func (s *Simulator) Run(rnd Randomizor) record.Report {
-	slot := &Slots{
-		Lists: s.List,
-		Track: true,
-	}
-	slot.Init(rnd)
-	run(slot, s.Spins)
-	return s.report(*slot)
+// simulator will try to run  the algortighim for  `spins` amount of times with `bet`
+// used interface to be shared with wighted or ranges algorithim based
+type Simulator interface {
+	Simulate(bet int64, spins int64) record.Report
 }
 
 // run the result
@@ -32,8 +21,10 @@ func run(slot *Slots, spins int64) {
 }
 
 // make a report
-func (s *Simulator) report(slot Slots) record.Report {
+func (slot *Slots) Simulate(bet int64, spins int64) record.Report {
+	run(slot, spins)
 	report := record.Report{
+		Bet:          bet,
 		Each:         map[int64]record.Report{},
 		Hit:          slot.H,
 		Fail:         slot.F,
@@ -45,7 +36,7 @@ func (s *Simulator) report(slot Slots) record.Report {
 	}
 	report.HF = slot.HF()
 	report.SAvg = slot.Savg()
-	report.Spent = s.Bet * s.Spins
+	report.Spent = bet * spins
 	for _, d := range slot.Lists {
 		v := d.Info()
 		totalHits := float64(slot.H)
@@ -65,13 +56,13 @@ func (s *Simulator) report(slot Slots) record.Report {
 			if math.IsInf(res, 1) || math.IsNaN(res) {
 				res = 0
 			}
-			childReport.Contirbution = res
+			childReport.Contribution = res
 		} else {
-			res := float64(v.H) * 100 / float64(s.Spins)
+			res := float64(v.H) * 100 / float64(spins)
 			if math.IsInf(res, 1) || math.IsNaN(res) {
 				res = 0
 			}
-			childReport.Contirbution = res
+			childReport.Contribution = res
 		}
 		report.Each[v.ID] = childReport
 

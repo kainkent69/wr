@@ -56,13 +56,14 @@ func main() {
 		&SlotItem{W: &wr.W{ID: 3, Weights: 10000, IsEmpty: true}, reward: 0},
 	}
 
-	simulator := wr.Simulator{
-		List:  items,
-		Spins: 100000,
-		Bet:   100,
+	slot := wr.Slots{
+		Lists: items,
+		Track: true,
 	}
 
-	report := simulator.Run(wr.Default)
+	slot.Init(wr.Default)
+
+	report := slot.Simulate(100, 100000)
 	report.Print()
 }
 ```
@@ -99,14 +100,19 @@ func main() {
 	game.reward = 200
 
 	// Spin and check if it's a hit
-	result := game.r.Spin(wr.Default)
-	if result <= acceptable {
-		game.r.Hit(game)
-	} else {
-		game.r.Unhit()
+	simulator := ranges.Simulator{
+		R: &r,
+		Task: func() {
+			result := game.r.Spin(wr.Default)
+			if result <= acceptable {
+				game.r.Hit(game)
+			} else {
+				game.r.Unhit()
+			}
+		},
 	}
 
-	report := game.r.NewReport(100, 1)
+	report := simulator.Simulate(100, 100000)
 	report.Print()
 }
 ```

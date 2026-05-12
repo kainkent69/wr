@@ -20,47 +20,36 @@ func (w *wl) Reward() int64 {
 }
 
 func TestMain(t *testing.T) {
-	list0 := []*wl{
-		{
+	var list []wr.Wer = []wr.Wer{
+		&wl{
 			W: &wr.W{
 				ID:      1,
-				Weights: 5000,
-			},
-			reward: 500,
-		},
-		{
-			W: &wr.W{
-				ID:      2,
-				Weights: 5000,
-			},
-			reward: 500,
-		},
-		{
-			W: &wr.W{
-				ID:      3,
-				Weights: 5000,
-			},
-			reward: 500,
-		},
-	}
-
-	list1 := []*wl{
-		{
-			W: &wr.W{
-				ID:      4,
-				Weights: 10000,
+				Weights: 14000,
 				IsEmpty: true,
 			},
 			reward: 0,
 		},
-	}
-
-	list := []wr.Wer{}
-	for _, l := range list0 {
-		list = append(list, l)
-	}
-	for _, l := range list1 {
-		list = append(list, l)
+		&wl{
+			W: &wr.W{
+				ID:      2,
+				Weights: 2000,
+			},
+			reward: 300,
+		},
+		&wl{
+			W: &wr.W{
+				ID:      3,
+				Weights: 1400,
+			},
+			reward: 500,
+		},
+		&wl{
+			W: &wr.W{
+				ID:      4,
+				Weights: 600,
+			},
+			reward: 750,
+		},
 	}
 
 	// record the slots
@@ -71,13 +60,7 @@ func TestMain(t *testing.T) {
 
 	slot.Init(wr.Default)
 
-	sm := wr.Simulator{
-		List:  list,
-		Spins: 100000,
-		Bet:   100,
-	}
-
-	report := sm.Run(wr.Default)
+	report := slot.Simulate(100, 5000000)
 	report.Print()
 
 }

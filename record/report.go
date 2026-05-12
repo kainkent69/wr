@@ -15,7 +15,7 @@ type Report struct {
 	StreakResult map[int64]int64
 	MinStreak    int64
 	MaxStreak    int64
-	Contirbution float64
+	Contribution float64
 	// the meaning for empty
 	IsEmpty bool
 
@@ -25,6 +25,8 @@ type Report struct {
 	Won        int64
 	RTP        float64
 	RTPContrib float64
+	// bet
+	Bet int64
 }
 
 // return to something printable

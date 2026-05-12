@@ -46,6 +46,6 @@ func TestRange(t *testing.T) {
 		M.Run(prob, bet)
 	}
 
-	report := M.r.NewReport(bet, M.Spins)
+	report := M.r.Simulate(bet, M.Spins)
 	report.Print()
 }

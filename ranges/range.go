@@ -67,7 +67,7 @@ type Rer interface {
 	Reward() int64
 }
 
-func (s *R) NewReport(bet int64, spins int64) record.Report {
+func (s *R) Simulate(bet int64, spins int64) record.Report {
 	s.Report.Hit = s.H
 	s.Fail = s.F
 	s.StreakResult = s.SReq
@@ -91,7 +91,7 @@ func (s *R) NewReport(bet int64, spins int64) record.Report {
 		if math.IsInf(res, 1) || math.IsNaN(res) {
 			res = 0
 		}
-		childReport.Contirbution = res
+		childReport.Contribution = res
 		s.Report.Each[k] = childReport
 
 	}
@@ -100,4 +100,17 @@ func (s *R) NewReport(bet int64, spins int64) record.Report {
 	s.Report.RTP = float64(s.Report.Won) * 100 / float64(s.Spent)
 	s.Report.RTPContrib = float64(s.Report.Won) * 100 / float64(s.Spent)
 	return s.Report
+}
+
+// Simulator is a helper to run range simulations
+type Simulator struct {
+	R    *R
+	Task func()
+}
+
+func (s *Simulator) Simulate(bet int64, spins int64) record.Report {
+	for range spins {
+		s.Task()
+	}
+	return s.R.Simulate(bet, spins)
 }
