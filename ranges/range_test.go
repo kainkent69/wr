@@ -22,7 +22,15 @@ func (m *MockHilo) Reward() int64 {
 	return m.reward
 }
 
+func (m *MockHilo) Id() int64 {
+	if m.reward > 0 {
+		return 1
+	}
+	return 0
+}
+
 func (m *MockHilo) Run(prob int64, bet int64) {
+	m.reward = 0
 	acceptable := m.r.Range / (100 / prob)
 	result := m.Info().Spin(wr.Default)
 	m.reward = bet * prob / (100 + 3)

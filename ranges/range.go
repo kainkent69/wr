@@ -41,30 +41,31 @@ func (r *R) Hit(rer Rer) {
 	}
 
 	reward := rer.Reward()
-	each, ok := r.Each[reward]
+	each, ok := r.Each[rer.Id()]
 	if !ok {
 		each = &record.Record{
 			SReq: map[int64]int64{},
 		}
-		r.Each[reward] = each
+		r.Each[rer.Id()] = each
 	}
 
 	each.Hit()
 	r.Record.Hit()
 
 	r.Won += reward
-	report, ok := r.Report.Each[reward]
+	report, ok := r.Report.Each[rer.Id()]
 	if !ok {
 		report = record.Report{}
 	}
 	report.Won += reward
 	// record
-	r.Report.Each[reward] = report
+	r.Report.Each[rer.Id()] = report
 }
 
 type Rer interface {
 	Info() *R
 	Reward() int64
+	Id() int64
 }
 
 func (s *R) Simulate(bet int64, spins int64) record.Report {
