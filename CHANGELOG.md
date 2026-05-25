@@ -6,6 +6,7 @@
 - `Bet` field added to `Report` for accurate RTP calculations.
 - `RTPContrib` and `Contribution` metrics for detailed analysis of each outcome.
 - `ToWer` helper function in `wr` package.
+- `Rer` added Id() for simulation 
 
 ### Changed
 - `Simulator` changed from a struct to an interface to support different simulation types.
